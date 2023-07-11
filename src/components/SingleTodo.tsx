@@ -8,13 +8,24 @@ interface Props {
   todos: Todo[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   todo: Todo;
-  key: number;
 }
 
-const SingleTodo: React.FC<Props> = ({ todo, key, setTodos, todos }) => {
+const SingleTodo: React.FC<Props> = ({ todo, setTodos, todos }) => {
+  const handleDoneTodo = (id: number) => {
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
+      )
+    );
+  };
+
   return (
     <form className="todo_single">
-      <span className="todo_single-text">{todo.todo}</span>
+      {todo.isDone ? (
+        <s className="todo_single-text">{todo.todo}</s>
+      ) : (
+        <span className="todo_single-text">{todo.todo}</span>
+      )}
       <div>
         <span className="todo_icon">
           <AiFillEdit />
@@ -22,7 +33,7 @@ const SingleTodo: React.FC<Props> = ({ todo, key, setTodos, todos }) => {
         <span className="todo_icon">
           <AiFillDelete />
         </span>
-        <span className="todo_icon">
+        <span className="todo_icon" onClick={() => handleDoneTodo(todo.id)}>
           <MdDone />
         </span>
       </div>
